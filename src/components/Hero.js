@@ -11,6 +11,7 @@ const HeroSection = styled.section`
   position: relative;
   overflow: hidden;
   padding: 0 2rem;
+  padding-top: 5rem; /* avoid overlapping with fixed navbar on mobile */
 `;
 
 const BackgroundGradient = styled.div`
@@ -73,6 +74,7 @@ const Content = styled.div`
     grid-template-columns: 1fr;
     text-align: center;
     gap: 2rem;
+    justify-items: center;
   }
 `;
 
@@ -99,6 +101,9 @@ const Name = styled(motion.h1)`
   @media (max-width: 768px) {
     font-size: 2.5rem;
   }
+  @media (max-width: 380px) {
+    font-size: 2.2rem;
+  }
 `;
 
 const Title = styled(motion.h2)`
@@ -110,6 +115,9 @@ const Title = styled(motion.h2)`
   @media (max-width: 768px) {
     font-size: 1.5rem;
   }
+  @media (max-width: 380px) {
+    font-size: 1.3rem;
+  }
 `;
 
 const Description = styled(motion.p)`
@@ -118,6 +126,11 @@ const Description = styled(motion.p)`
   line-height: 1.6;
   margin-bottom: 2rem;
   max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  @media (max-width: 768px) {
+    max-width: 38ch;
+  }
 `;
 
 const CTAButton = styled(motion.button)`
@@ -137,12 +150,20 @@ const CTAButton = styled(motion.button)`
     transform: translateY(-2px);
     box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
   }
+  @media (max-width: 768px) {
+    margin-right: 0;
+    width: 100%;
+    max-width: 240px;
+  }
 `;
 
 const SocialLinks = styled(motion.div)`
   display: flex;
   gap: 1rem;
   margin-top: 2rem;
+  @media (max-width: 768px) {
+    justify-content: center;
+  }
 `;
 
 const SocialLink = styled(motion.a)`
@@ -166,6 +187,9 @@ const SocialLink = styled(motion.a)`
 const VisualContent = styled.div`
   position: relative;
   z-index: 2;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 `;
 
 const CodeBlock = styled(motion.div)`
@@ -177,6 +201,13 @@ const CodeBlock = styled(motion.div)`
   font-family: 'Courier New', monospace;
   font-size: 0.9rem;
   line-height: 1.6;
+  width: 100%;
+  max-width: 520px;
+  overflow: hidden;
+  @media (max-width: 768px) {
+    padding: 1.25rem;
+    max-width: 92vw;
+  }
 `;
 
 const CodeLine = styled.div`
@@ -185,7 +216,8 @@ const CodeLine = styled.div`
 `;
 
 const TypewriterWrapper = styled.div`
-  white-space: pre;
+  white-space: pre-wrap; /* allow wrapping on small screens */
+  word-break: break-word;
 `;
 
 const ScrollIndicator = styled(motion.div)`

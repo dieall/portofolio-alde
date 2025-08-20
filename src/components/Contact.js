@@ -207,6 +207,16 @@ const SuccessMessage = styled(motion.div)`
   gap: 0.5rem;
 `;
 
+const ErrorMessage = styled(motion.div)`
+  background: rgba(231, 76, 60, 0.1);
+  border: 1px solid rgba(231, 76, 60, 0.3);
+  border-radius: 10px;
+  padding: 1rem;
+  color: #e74c3c;
+  text-align: center;
+  margin-top: 1rem;
+`;
+
 const SocialLinks = styled.div`
   display: flex;
   gap: 1rem;
@@ -241,6 +251,7 @@ const Contact = ({ onSectionChange }) => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (e) => {
     setFormData({
@@ -252,33 +263,62 @@ const Contact = ({ onSectionChange }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-    setFormData({ name: '', email: '', subject: '', message: '' });
-    
-    // Reset success message after 5 seconds
-    setTimeout(() => setIsSubmitted(false), 5000);
+    setIsSubmitted(false);
+    setErrorMessage('');
+
+    const accessKey = process.env.REACT_APP_WEB3FORMS_KEY || '';
+    if (!accessKey) {
+      setIsSubmitting(false);
+      setErrorMessage('Server key belum diatur. Tambahkan REACT_APP_WEB3FORMS_KEY di file .env.local');
+      return;
+    }
+
+    try {
+      const payload = {
+        access_key: accessKey,
+        subject: formData.subject || 'New Contact Message',
+        from_name: formData.name,
+        from_email: formData.email,
+        reply_to: formData.email,
+        message: formData.message
+      };
+
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const result = await response.json();
+      if (response.ok && result.success) {
+        setIsSubmitted(true);
+        setFormData({ name: '', email: '', subject: '', message: '' });
+        setTimeout(() => setIsSubmitted(false), 5000);
+      } else {
+        setErrorMessage(result.message || 'Gagal mengirim pesan. Coba lagi.');
+      }
+    } catch (err) {
+      setErrorMessage('Terjadi kesalahan jaringan. Periksa koneksi internet Anda.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const contactInfo = [
     {
       icon: <FiMail />,
       title: 'Email',
-      text: 'alde@example.com'
+      text: 'aldiharun07@gmail.com'
     },
     {
       icon: <FiPhone />,
       title: 'Phone',
-      text: '+62 812-3456-7890'
+      text: '+62 812-1146-6080'
     },
     {
       icon: <FiMapPin />,
       title: 'Location',
-      text: 'Jakarta, Indonesia'
+      text: 'Bandung, Indonesia'
     }
   ];
 
@@ -438,6 +478,16 @@ const Contact = ({ onSectionChange }) => {
                 </>
               )}
             </SubmitButton>
+
+            {errorMessage && (
+              <ErrorMessage
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                {errorMessage}
+              </ErrorMessage>
+            )}
 
             {isSubmitted && (
               <SuccessMessage

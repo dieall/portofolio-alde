@@ -66,6 +66,23 @@ npm start
 
 4. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
+## 📧 Configure Contact Form (Send to your Gmail)
+
+This project uses [Web3Forms](https://web3forms.com/) to send form submissions directly to your email without a custom backend.
+
+### Steps:
+1. Go to [Web3Forms](https://web3forms.com/), sign in with your email (Gmail) and create a new access key.
+2. Create a `.env.local` file in the project root with the following content:
+```bash
+REACT_APP_WEB3FORMS_KEY=your_access_key_here
+```
+3. Restart the dev server after adding `.env.local`.
+4. Test the contact form on the Contact section.
+
+Notes:
+- Form will show a success or error message.
+- Replace your email and phone in `src/components/Contact.js` (contactInfo array) as needed.
+
 ## 📱 Sections
 
 ### 🏠 Hero Section
@@ -170,6 +187,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
+- [Web3Forms](https://web3forms.com/) for serverless form handling
 - [Framer Motion](https://www.framer.com/motion/) for amazing animations
 - [React Icons](https://react-icons.github.io/react-icons/) for beautiful icons
 - [Styled Components](https://styled-components.com/) for CSS-in-JS
