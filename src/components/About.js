@@ -90,15 +90,11 @@ const ProfileImage = styled.div`
   }
 `;
 
-const ImagePlaceholder = styled.div`
+const ProfileImageElement = styled.img`
   width: 100%;
   height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 4rem;
-  color: rgba(255, 255, 255, 0.8);
-  font-weight: 700;
+  object-fit: cover;
+  border-radius: 20px;
 `;
 
 const FloatingElements = styled.div`
@@ -112,15 +108,21 @@ const FloatingElements = styled.div`
 
 const FloatingElement = styled(motion.div)`
   position: absolute;
-  width: 60px;
-  height: 60px;
-  background: rgba(102, 126, 234, 0.1);
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.15);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
-  color: #667eea;
+  font-size: 1.2rem;
+  color: ${props => props.color || '#fff'};
+  backdrop-filter: blur(10px);
+  border: 2px solid ${props => props.color || '#fff'};
+  box-shadow: 
+    0 8px 32px rgba(255, 255, 255, 0.2),
+    0 0 20px ${props => props.color || '#fff'}40;
+  filter: drop-shadow(0 0 10px ${props => props.color || '#fff'}60);
 `;
 
 const TextContent = styled.div``;
@@ -239,26 +241,36 @@ const About = ({ onSectionChange }) => {
             viewport={{ once: true }}
           >
             <ProfileImage>
-              <ImagePlaceholder>ALDE</ImagePlaceholder>
+              <ProfileImageElement src="/foto.png" alt="Alde Profile" />
             </ProfileImage>
             
             <FloatingElements>
               {floatingElements.map((element) => (
                 <FloatingElement
                   key={element.id}
+                  color={element.color}
                   style={{
                     left: element.x,
                     top: element.y
                   }}
                   animate={{
-                    y: [0, -10, 0],
-                    rotate: [0, 5, 0]
+                    y: [0, -40, 20, -30, 10, 0],
+                    x: [0, 15, -10, 12, -5, 0],
+                    rotate: [0, 20, -15, 10, -8, 0],
+                    scale: [1, 1.3, 0.7, 1.2, 0.9, 1],
+                    opacity: [0.6, 1, 0.7, 1, 0.8, 0.6]
                   }}
                   transition={{
                     duration: 3,
-                    delay: element.id * 0.2,
+                    delay: element.id * 0.3,
                     repeat: Infinity,
                     ease: "easeInOut"
+                  }}
+                  whileHover={{
+                    scale: 1.8,
+                    rotate: 360,
+                    filter: "brightness(1.5)",
+                    transition: { duration: 0.4 }
                   }}
                 >
                   {element.icon}
@@ -279,18 +291,7 @@ const About = ({ onSectionChange }) => {
               evolved into a deep passion for creating meaningful digital experiences.
             </AboutText>
             
-            <AboutText
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              viewport={{ once: true }}
-            >
-              I specialize in React, JavaScript, and modern web technologies. I believe in writing 
-              clean, maintainable code and creating user-centered designs that solve real problems. 
-              When I'm not coding, you can find me exploring new technologies, contributing to open 
-              source projects, or sharing knowledge with the developer community.
-            </AboutText>
-
+ 
             <StatsGrid>
               {stats.map((stat, index) => (
                 <StatCard
